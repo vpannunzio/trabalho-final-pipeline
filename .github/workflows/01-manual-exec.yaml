@@ -1,6 +1,7 @@
-name: Node.js Tests
+name: Execução Manual
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
   pull_request:
