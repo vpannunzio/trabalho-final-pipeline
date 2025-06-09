@@ -3,29 +3,39 @@ name: Execução Manual
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x]
-
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    
-    - name: Install dependencies
-      run: npm ci
-    
-    - name: Run tests
-      run: npm test 
+      # clone do projeto
+      - uses: actions/checkout@v4
+      
+      # instalação do node
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'yarn'
+      
+      # instalação do Yarn
+      - name: Instalando Yarn
+        run: npm install -g yarn
+      
+      # instalação das dependências
+      - name: Instalando dependências
+        run: yarn
+      
+      # executar testes unitários
+      - name: Executando Testes Unitários
+        run: yarn test
+      
+      # instalação do Playwright
+      - name: Instalando Playwright
+        run: yarn playwright install
+      
+      # executar os testes e2e
+      - name: Executando Testes E2E
+        run: yarn run e2e
